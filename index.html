@@ -1,0 +1,87 @@
+<head>
+  <script type="text/javascript">
+    const total = 7;
+    const minOpacity = 0.1;
+    const maxOpacity = 0.5;
+    const colorFloor = 190;
+
+    window.onload = () => {
+      for (let i = 0; i < total; i++){
+        const opacity = minOpacity+(maxOpacity-minOpacity)*((total-i)/total);
+        const red = colorFloor + Math.floor(Math.random()*(255-colorFloor));
+        const green = colorFloor + Math.floor(Math.random()*(255-colorFloor));
+        const blue = colorFloor + Math.floor(Math.random()*(255-colorFloor));
+        const style = `style="background-color: rgba(${red}, ${green}, ${blue}, ${opacity})"`;
+        document.querySelectorAll('.hand:empty').forEach(n => {
+          n.innerHTML = `<div class="hand rotate-minute" ${style}></div><div class="hand rotate-second" ${style}></div>`;
+        });
+      }
+
+      var css = document.createElement('style');
+      css.type = 'text/css';
+      var hours = new Date().getHours()%12;
+      var minutes = new Date().getMinutes();
+      var seconds = new Date().getSeconds()+(60*minutes)+(60*60*hours);
+      var styles = `.hand {animation-delay: ${seconds*-1}s;}`;
+
+      if (css.styleSheet) css.styleSheet.cssText = styles;
+      else css.appendChild(document.createTextNode(styles));
+
+      document.getElementsByTagName("head")[0].appendChild(css);
+    };
+  </script>
+  <style>
+    @keyframes rotating {
+      from {
+        transform: rotate(180deg);
+      }
+      to {
+        transform: rotate(540deg);
+      }
+    }
+
+    .rotate-second {
+      animation: rotating 60.083449s linear infinite; /*(60*60*12)/((60*12)-1)*/
+    }
+
+    .rotate-minute {
+      animation: rotating 3927.27273s linear infinite; /*(60*60*12)/(12-1)*/
+    }
+
+    .rotate-hour {
+      animation: rotating 43200s linear infinite;
+    }
+
+    .hand {
+      display: inline-block;
+      transform-origin: 50% 100%;
+      width: 1px;
+      height: 20vmin;
+      position: absolute;
+      left: 0;
+      bottom: 100%;
+      background-color: white;
+      border-radius: 100px;
+    }
+
+    .hour {
+      position: fixed;
+      background-color: white;
+      left: 50%;
+      bottom: 50%;
+      width: 2px;
+      height: 10vmin;
+      transform-origin: 50% 50%;
+    }
+
+    body {
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="hand rotate-hour hour">
+    <div class="hand rotate-minute"></div>
+    <div class="hand rotate-second"></div>
+  </div>
+</body>
